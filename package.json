@@ -1,0 +1,40 @@
+{
+  "name": "react-native-mobiprint3plus",
+  "title": "React Native Mobiprint3plus",
+  "version": "1.0.0",
+  "description": "React Native Mobiprint3plus Module",
+  "main": "index.js",
+  "files": [
+    "README.md",
+    "android",
+    "index.js",
+    "ios",
+    "react-native-mobiprint3plus.podspec"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmmelsayed92/react-native-mobiprint3plus.git",
+    "baseUrl": "https://github.com/mmmelsayed92/react-native-mobiprint3plus"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": {
+    "name": "Mahmoud El-Sayed",
+    "email": "mmmelsayed92@gmail.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": ">=16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
+  }
+}

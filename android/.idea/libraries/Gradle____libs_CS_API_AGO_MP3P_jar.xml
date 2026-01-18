@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ./libs/CS_API_AGO_MP3P.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/CS_API_AGO_MP3P.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

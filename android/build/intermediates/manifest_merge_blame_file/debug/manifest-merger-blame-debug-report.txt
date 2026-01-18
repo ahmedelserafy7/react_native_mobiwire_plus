@@ -1,0 +1,28 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<!-- AndroidManifest.xml -->
+3<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+4    package="com.mm.treka.mobiprint3plus" >
+5
+6    <uses-sdk
+7        android:minSdkVersion="21"
+7-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml
+8        android:targetSdkVersion="30" />
+8-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml
+9
+10    <uses-permission android:name="android.permission.INTERNET" />
+10-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:6:5-67
+10-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:6:22-64
+11    <uses-permission android:name="android.permission.BLUETOOTH" />
+11-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:7:5-68
+11-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:7:22-65
+12    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+12-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:8:5-74
+12-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:8:22-71
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:6:5-67
+13-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:6:22-64
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:10:5-80
+14-->/Users/mahmoudel-sayed/react-native-mobiprint3plus/android/src/main/AndroidManifest.xml:10:22-78
+15
+16</manifest>
