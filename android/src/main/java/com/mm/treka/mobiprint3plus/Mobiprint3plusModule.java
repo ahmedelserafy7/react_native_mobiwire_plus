@@ -102,7 +102,7 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void printLine() {
-        printer.addTextToPrint("===========================", null, 25, true, false, 1);
+        printer.addTextToPrint("---------------------------------------------------------", null, 25, true, false, 1);
     }
 
     @ReactMethod
