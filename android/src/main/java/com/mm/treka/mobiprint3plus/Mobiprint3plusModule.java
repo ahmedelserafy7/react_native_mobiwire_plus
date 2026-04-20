@@ -65,13 +65,13 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
                     }
 
                     // 2. Full Receipt Body (ONE UNIFIED BITMAP)
-                    // We render everything from the headers down to the QR into one image 
+                    // We render everything from the headers down to the QR into one image
                     // to completely bypass all intermediate hardware "jumps" (feeds).
                     final int paperWidth = 384;
-                    final int rowGap = 4; // Tightened
-                    final int sectionDividerGap = 8;
+                    final int rowGap = 12; // Increased for visibility
+                    final int sectionDividerGap = 16;
                     int[] boldLineIndices = parseIntArray(boldLineIndicesArray);
-                    
+
                     java.util.ArrayList<Bitmap> bodyBitmaps = new java.util.ArrayList<>();
 
                     // A. Add Headers to the bitmap sequence
@@ -114,7 +114,8 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
 
                         for (int i = 0; i < contentRows.size(); i++) {
                             String rowData = contentRows.getString(i);
-                            if (rowData == null || rowData.trim().isEmpty()) continue;
+                            if (rowData == null || rowData.trim().isEmpty())
+                                continue;
 
                             boolean isBold = isBoldLine(i, boldLineIndices);
                             Bitmap rowBmp = renderTextLineToBitmap(rowData, paperWidth, 24, isBold);
@@ -123,24 +124,31 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
                                 currentRowInCurrentSection++;
                             }
 
-                            // Sectioning logic
+                            // 1. Handle Section Dividers (Lines)
+                            boolean addedSectionDivider = false;
                             if (sectionSizesArray != null) {
-                                int targetSize = (sectionIdx < sectionSizesArray.size()) ? sectionSizesArray.getInt(sectionIdx) : 2;
+                                int targetSize = (sectionIdx < sectionSizesArray.size())
+                                        ? sectionSizesArray.getInt(sectionIdx)
+                                        : 2;
                                 if (currentRowInCurrentSection >= targetSize) {
                                     bodyBitmaps.add(renderTextLineToBitmap(dividerStr, paperWidth, 24, false));
-                                    
-                                    Bitmap postDividerSpacer = Bitmap.createBitmap(paperWidth, 6, Bitmap.Config.RGB_565);
+
+                                    Bitmap postDividerSpacer = Bitmap.createBitmap(paperWidth, 10,
+                                            Bitmap.Config.RGB_565);
                                     postDividerSpacer.eraseColor(Color.WHITE);
                                     bodyBitmaps.add(postDividerSpacer);
 
                                     currentRowInCurrentSection = 0;
                                     sectionIdx++;
-                                } else if (i < contentRows.size() - 1) {
-                                    // FIXED: Spacer Must Be White
-                                    Bitmap spacer = Bitmap.createBitmap(paperWidth, rowGap, Bitmap.Config.RGB_565);
-                                    spacer.eraseColor(Color.WHITE);
-                                    bodyBitmaps.add(spacer);
+                                    addedSectionDivider = true;
                                 }
+                            }
+
+                            // 2. Handle Row Spacers (Focus: Spacers, not dividers!!)
+                            if (!addedSectionDivider && i < contentRows.size() - 1) {
+                                Bitmap spacer = Bitmap.createBitmap(paperWidth, rowGap, Bitmap.Config.RGB_565);
+                                spacer.eraseColor(Color.WHITE);
+                                bodyBitmaps.add(spacer);
                             }
                         }
                         // Final divider
@@ -164,7 +172,14 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
                                 bodyBitmaps.add(discSpacer);
 
                                 Bitmap discBmp = renderTextLineToBitmap(qrDisclaimer, paperWidth, 22, false);
-                                if (discBmp != null) bodyBitmaps.add(discBmp);
+                                if (discBmp != null) {
+                                    bodyBitmaps.add(discBmp);
+                                    
+                                    // Add spacing line (divider) after disclaimer
+                                    Bitmap postDiscSpacer = Bitmap.createBitmap(paperWidth, 8, Bitmap.Config.RGB_565);
+                                    postDiscSpacer.eraseColor(Color.WHITE);
+                                    bodyBitmaps.add(postDiscSpacer);
+                                }
                             }
                         }
                     }
@@ -172,8 +187,9 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
                     // Stitch and Print Everything (Unified Pass)
                     if (!bodyBitmaps.isEmpty()) {
                         int totalHeight = 0;
-                        for (Bitmap b : bodyBitmaps) totalHeight += b.getHeight();
-                        totalHeight += 10; 
+                        for (Bitmap b : bodyBitmaps)
+                            totalHeight += b.getHeight();
+                        totalHeight += 10;
 
                         Bitmap combined = Bitmap.createBitmap(paperWidth, totalHeight, Bitmap.Config.RGB_565);
                         combined.eraseColor(Color.WHITE);
@@ -209,7 +225,7 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Renders a single line of text into a Bitmap. 
+     * Renders a single line of text into a Bitmap.
      * Supports Label\tValue split rendering if \t is present.
      */
     private Bitmap renderTextLineToBitmap(String text, int paperWidth, int textSize, boolean isBold) {
@@ -219,7 +235,8 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
             paint.setColor(Color.BLACK);
             paint.setTextSize(textSize);
             paint.setTypeface(android.graphics.Typeface.create(
-                    android.graphics.Typeface.SANS_SERIF, isBold ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL));
+                    android.graphics.Typeface.SANS_SERIF,
+                    isBold ? android.graphics.Typeface.BOLD : android.graphics.Typeface.NORMAL));
 
             android.graphics.Paint.FontMetricsInt fm = paint.getFontMetricsInt();
             int lineHeight = fm.descent - fm.ascent + 2;
