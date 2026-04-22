@@ -250,12 +250,31 @@ public class Mobiprint3plusModule extends ReactContextBaseJavaModule {
                 String labelPart = parts[0];
                 String valuePart = parts[1];
 
-                // For RTL (Arabic): Draw Label on the RIGHT and Value on the LEFT
-                paint.setTextAlign(android.graphics.Paint.Align.RIGHT);
-                c.drawText(labelPart, paperWidth, -fm.ascent + 1, paint);
+                // Detect direction from label text: Arabic chars are U+0600–U+06FF
+                boolean isRTL = false;
+                for (int ci = 0; ci < labelPart.length(); ci++) {
+                    char ch = labelPart.charAt(ci);
+                    if (ch >= 0x0600 && ch <= 0x06FF) {
+                        isRTL = true;
+                        break;
+                    }
+                }
 
-                paint.setTextAlign(android.graphics.Paint.Align.LEFT);
-                c.drawText(valuePart, 0, -fm.ascent + 1, paint);
+                if (isRTL) {
+                    // Arabic (RTL): Label on the RIGHT, Value on the LEFT
+                    paint.setTextAlign(android.graphics.Paint.Align.RIGHT);
+                    c.drawText(labelPart, paperWidth, -fm.ascent + 1, paint);
+
+                    paint.setTextAlign(android.graphics.Paint.Align.LEFT);
+                    c.drawText(valuePart, 0, -fm.ascent + 1, paint);
+                } else {
+                    // English (LTR): Label on the LEFT, Value on the RIGHT
+                    paint.setTextAlign(android.graphics.Paint.Align.LEFT);
+                    c.drawText(labelPart, 0, -fm.ascent + 1, paint);
+
+                    paint.setTextAlign(android.graphics.Paint.Align.RIGHT);
+                    c.drawText(valuePart, paperWidth, -fm.ascent + 1, paint);
+                }
             } else {
                 // Draw Centred (Titles/Dividers)
                 paint.setTextAlign(android.graphics.Paint.Align.CENTER);
